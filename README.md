@@ -3,11 +3,11 @@ implementation of rfc8446 TLS 1.3 in pure python (educational purpose)
 
 # design
 
-  as is mainly for education of TLS 1.3 standard published in 2018, it uses almost all of the concepts 
+- as is mainly for education of TLS 1.3 standard published in 2018, it uses almost all of the concepts and key words for naming.every single message is an object which is responsible for serialization/deserialization.
 
-and key words for naming.
 
-  it implements the protocol process as state machine noted in rfc8446 Appendix A.1(client side).no server side support yet.
+- it implements the protocol process as state machine noted in rfc8446 Appendix A.1(client side).**no server side support yet.**
+
 
 files layout:
 
@@ -29,6 +29,56 @@ tests.py	--a simple test for tls1.3 client
 
 ![client-state-machine](doc/client-state-machine.png)
 
-# test server
+# test
 
-[tls13-spec test server](https://github.com/tlswg/tls13-spec/wiki/Implementations)
+TLS 1.3 test servers: [tls13-spec test server](https://github.com/tlswg/tls13-spec/wiki/Implementations)
+
+run test: `python -m unittest tests.TLSClientTest.test_client`
+
+# limits
+
+###### Implementations
+
+- Client ✓
+- Server x
+
+###### Cipher Suites
+
+- TLS_AES_128_GCM_SHA256 ✓
+- TLS_AES_256_GCM_SHA384 ✓
+- TLS_CHACHA20_POLY1305_SHA256 ✓
+- TLS_AES_128_CCM_SHA256 ✓
+- TLS_AES_128_CCM_8_SHA256 ✓
+
+###### Supported Groups Extension
+
+- secp256r1 ✓
+- secp384r1 x
+- secp521r1 x
+- x25519 ✓
+- x448 x
+- ffdhe2048 ✓
+- ffdhe3072 x
+- ffdhe4096 x
+- ffdhe6144 x
+- ffdhe8192 x
+
+###### Key Exchange Modes
+
+- (EC)HDE ✓
+- PSK-only ✓
+- PSK with (EC)DHE ✓
+
+###### Others
+
+- session resumption ✓
+- early data ✓
+- cookie x
+- oid filters x
+- post handshake auth x
+
+# Note
+
+if found any bugs, open an issue as you wish.
+
+welcome to contribute to this educational TLS 1.3 python lib.

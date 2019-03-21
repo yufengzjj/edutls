@@ -303,7 +303,7 @@ class TLSClientMachine(asyncio.Protocol):
     def _say_hello(self):
         extensions = [Extension(SupportedVersions()), Extension(ServerNameList((ServerName(self.host_port[0]),))),
                       Extension(SignatureSchemeList()), Extension(NamedGroupList()),
-                      Extension(KeyShareClientHello((KeyShareEntry(),
+                      Extension(KeyShareClientHello((KeyShareEntry(KeyExchange(NamedGroup.x25519)),
                                                      KeyShareEntry(KeyExchange(NamedGroup.secp256r1)),)
                                                     ))]
         if len(self._new_session_tickets) > 0 and self._new_session_tickets[0].max_early_data_size >= 0:

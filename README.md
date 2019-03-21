@@ -53,15 +53,15 @@ run test: `python -m unittest tests.TLSClientTest.test_client`
 ###### Supported Groups Extension
 
 - secp256r1 ✓
-- secp384r1 x
-- secp521r1 x
+- secp384r1 ✓
+- secp521r1 ✓
 - x25519 ✓
-- x448 x
+- x448 ✓
 - ffdhe2048 ✓
-- ffdhe3072 x
-- ffdhe4096 x
-- ffdhe6144 x
-- ffdhe8192 x
+- ffdhe3072 ✓
+- ffdhe4096 ✓
+- ffdhe6144 ✓
+- ffdhe8192 ✓
 
 ###### Key Exchange Modes
 
@@ -75,7 +75,9 @@ run test: `python -m unittest tests.TLSClientTest.test_client`
 - early data ✓
 - cookie x
 - oid filters x
-- post handshake auth x
+- post handshake authentication x
+- client certificate authentication x
+- server certificate verify  x
 
 # Note
 

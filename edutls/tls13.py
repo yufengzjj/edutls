@@ -58,7 +58,7 @@ class TLSClientMachine(asyncio.Protocol):
         self.logger = logging.getLogger("TLS Client")
         self.logger.setLevel(logging.DEBUG)
 
-    def _process_record(self, record: TLSPlaintext):
+    def process_record(self, record: TLSPlaintext):
         self.logger.debug(f"receive {record.content_type.name} record")
         for case in switch(record.content_type):
             if case(ContentType.invalid):
@@ -158,6 +158,7 @@ class TLSClientMachine(asyncio.Protocol):
                 self._post_certificate_verify()
                 self._finished()
                 self.state = TLSClientMachineState.CONNECTED
+                self._new_session_tickets.clear()
                 self._write_engine_thread.start()
                 break
             if case(HandshakeType.new_session_ticket):
@@ -186,9 +187,6 @@ class TLSClientMachine(asyncio.Protocol):
                 selected_identity: SelectedIdentity = pre_share_key.ext
                 assert 0 < selected_identity.index < len(self._new_session_tickets), \
                     f"received error identity index:{selected_identity.index}"
-                self.key = KeyDerivation(self.key.cipher_suite(),
-                                         )
-                self._new_session_tickets.clear()
                 self._use_psk = True
                 psk = self._new_session_tickets[selected_identity.index].psk
                 self.logger.debug("using psk handshake")
@@ -232,7 +230,7 @@ class TLSClientMachine(asyncio.Protocol):
                         TLSClientMachineState.WAIT_SH < self.state <= TLSClientMachineState.CONNECTED:
                     c_record = self.construct_read_tls_cipher_text(record.content_type, record.data)
                     record = c_record.tls_inner_plaintext.to_tls_plaintext()
-                self._process_record(record)
+                self.process_record(record)
             except AssertionError as er:
                 self.logger.error("%s", er)
                 if len(self._data_recv_internal) <= 0:
